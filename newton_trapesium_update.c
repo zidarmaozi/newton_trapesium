@@ -50,7 +50,7 @@ double f(double x, Fungsi F)
 }
 
 /* -----------------------------
-   MAIN PROGRAM
+   MAIN PROGRAM 1
 --------------------------------*/
 int main()
 {
