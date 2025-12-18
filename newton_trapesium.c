@@ -16,13 +16,6 @@ double koef_eksponen = 0.0;   // Untuk e^(koef*x)
 double basis_logaritma = 0.0; // Untuk a^x
 
 int pilihan_menu = 0;
-/*
-1: P(x), 2: sqrt(P(x)), 3: P(x)/Q(x), 4: sqrt(P/Q)
-5: P/sqrt(Q), 6: sqrt(P)/Q
-7: e^(koef*x) <-- BARU
-8: basis^x Â  Â  <-- BARU
-9: ln(x) / x Â  <-- BARU
-*/
 
 /* --- FUNGSI MATEMATIKA DASAR --- */
 double hitung_polinomial(double x, double koef[], int pangkat[], int jumlah_suku)
@@ -59,7 +52,7 @@ double jalankan_fungsi(double x)
             return NAN;
         nilai_akhir = sqrt(hasil_P);
     }
-    // ... (Menu 3 sampai 6 sama seperti sebelumnya, perlu Q(x))
+    // ... (Menu 3 sampai 6 sama seperti, perlu Q(x))
     else if (pilihan_menu >= 3 && pilihan_menu <= 6)
     {
         hasil_Q = hitung_polinomial(x, koef_Q, pangkat_Q, jumlah_suku_Q);
