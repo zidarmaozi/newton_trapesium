@@ -27,6 +27,50 @@ double hitung_polinomial(double x, double koef[], int pangkat[], int jumlah_suku
     return hasil;
 }
 
+double integral_polinomial(double a, double b, double koef[], int pangkat[], int jumlah_suku)
+{
+    double hasil = 0.0;
+    for (int i = 0; i < jumlah_suku; i++)
+    {
+        double antideriv_at_b = koef[i] / (pangkat[i] + 1.0) * pow(b, pangkat[i] + 1);
+        double antideriv_at_a = koef[i] / (pangkat[i] + 1.0) * pow(a, pangkat[i] + 1);
+        hasil += antideriv_at_b - antideriv_at_a;
+    }
+    return hasil;
+}
+
+double hitung_eksak(double a, double b)
+{
+    if (pilihan_menu == 1) // P(x)
+    {
+        return integral_polinomial(a, b, koef_P, pangkat_P, jumlah_suku_P);
+    }
+    else if (pilihan_menu == 7) // e^(A*x)
+    {
+        if (koef_eksponen == 0)
+            return 0.0; // Integral konstan 0, tapi asumsikan tidak
+        return (1.0 / koef_eksponen) * (exp(koef_eksponen * b) - exp(koef_eksponen * a));
+    }
+    else if (pilihan_menu == 8) // B^x
+    {
+        if (basis_logaritma == 1)
+            return b - a;
+        if (basis_logaritma <= 0)
+            return NAN;
+        return (pow(basis_logaritma, b) - pow(basis_logaritma, a)) / log(basis_logaritma);
+    }
+    else if (pilihan_menu == 9) // ln(x)/x
+    {
+        // Integral tidak tertutup, return NAN
+        return NAN;
+    }
+    else
+    {
+        // Untuk menu 2-6, integral analitik sulit atau tidak tertutup, return NAN
+        return NAN;
+    }
+}
+
 /* --- FUNGSI UTAMA f(x) --- */
 double jalankan_fungsi(double x)
 {
@@ -202,7 +246,6 @@ int main()
 
         // n = (b-a)/h
         n = (int)((batas_b - batas_a) / h + 1e-9);
-
         // Kaidah Trapesium hanya perlu n > 0
         if (n > 0)
         {
@@ -211,14 +254,15 @@ int main()
         }
         else
         {
+            Printf(">---[ ERROR INPUT JARAK PIAS ]---\n");
             printf("[Peringatan] Nilai n = %d (<= 0).\n", n);
-            printf("Jumlah pias WAJIB positif. Silakan masukkan nilai h yang lain!\n\n");
+            printf("[ERROR] Batas Bawah > Batas Atas.\n\n");
+            return 0;
         }
     }
 
-    /*---[ Input Nilai Eksak ]---*/
-    printf("\nMasukkan Nilai Eksak (Analitik): ");
-    scanf("%lf", &eksak);
+    /*---[ Hitung Nilai Eksak Otomatis ]---*/
+    eksak = hitung_eksak(batas_a, batas_b);
 
     /*---[ Untuk Menampilkan Tabel Evaluasi ]---*/
     printf("\n--- Tabel Evaluasi ---\n");
@@ -233,7 +277,7 @@ int main()
 
     for (int i = 0; i <= n; i++)
     {
-        x = batas_a + (i * h);
+        x = batas_a + (i * h); // x_i = a + i*h
         y = jalankan_fungsi(x);
 
         if (isnan(y))
@@ -256,14 +300,22 @@ int main()
     printf("-----------------------------------\n");
 
     /*---[ HITUNG INTEGRAL DENGAN KAIDAH TRAPESIUM ]---*/
-    // Rumus Trapesium: (h/2) * [ f(x0) + f(xn) ] + h * Σf(xi) untuk i = 1 sampai n-1
+    // Rumus kaidah trapesium : (h/2) * [ f(x0) + f(xn) ] + h * Σ f(xi) untuk i = 1 sampai n-1
     double integral = (h / 2.0) * (f_awal + f_akhir) + h * sigma_tengah;
 
     printf("\n>>> HASIL AKHIR INTEGRASI (Kaidah Trapesium) <<<\n");
     printf("Nilai Aproksimasi = %.4f\n", integral);
 
-    printf("\n>>> HASIL GALAT <<<\n");
-    printf("Nilai GALAT         = %.4f\n", fabs(integral - eksak));
+    if (!isnan(eksak))
+    {
+        printf("Nilai Eksak         = %.4f\n", eksak);
+        printf("\n>>> HASIL GALAT <<<\n");
+        printf("Nilai GALAT         = %.4f\n", fabs(integral - eksak));
+    }
+    else
+    {
+        printf("\n[Catatan] Nilai eksak tidak dapat dihitung otomatis untuk fungsi ini.\n");
+    }
 
     return 0;
 }
