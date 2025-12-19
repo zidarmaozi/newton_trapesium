@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-/* --- VARIABEL GLOBAL --- */
 double koef_P[50];
 int pangkat_P[50];
 int jumlah_suku_P = 0;
@@ -11,7 +10,7 @@ double koef_Q[50];
 int pangkat_Q[50];
 int jumlah_suku_Q = 0;
 
-// Variabel Tambahan untuk Fungsi Non-Polinomial
+/*---[ Variabel Tambahan untuk Fungsi Non-Polinomial ]---*/
 double koef_eksponen = 0.0;   // Untuk e^(koef*x)
 double basis_logaritma = 0.0; // Untuk a^x
 
@@ -83,6 +82,7 @@ double jalankan_fungsi(double x)
             nilai_akhir = sqrt(hasil_P) / hasil_Q;
         }
     }
+
     // untuk soal no 1
     else if (pilihan_menu == 7) // e^(koef*x). Contoh: e^(5x) -> koef=5
     {
@@ -127,7 +127,6 @@ void input_data_polinomial(char nama_poly, double koef[], int pangkat[], int *ju
     }
 }
 
-/* --- PROGRAM UTAMA --- */
 int main()
 {
     double batas_a, batas_b, h, eksak;
@@ -137,7 +136,7 @@ int main()
     printf(" PROGRAM NEWTON COTES - KAIDAH TRAPESIUM\n");
     printf("==========================================\n\n");
 
-    // 1. PILIH JENIS FUNGSI
+    /*---[ PILIH JENIS FUNGSI ]---*/
     printf("Pilih Jenis Fungsi f(x):\n");
     printf("-------------------------------------------------\n");
     printf("1. f(x) = P(x)\n");
@@ -153,7 +152,7 @@ int main()
     printf("Masukkan Pilihan Anda (1 - 9): ");
     scanf("%d", &pilihan_menu);
 
-    // 2. INPUT KOEFISIEN
+    /*---[ Input Data Polinomial ]---*/
     if (pilihan_menu == 1 || pilihan_menu == 2)
     {
         input_data_polinomial('P', koef_P, pangkat_P, &jumlah_suku_P);
@@ -188,14 +187,14 @@ int main()
         return 0;
     }
 
-    // 3. INPUT BATAS INTEGRAL
+    /*---[ Input Batas Integral ]---*/
     printf("\n--- Input Batas Integral ---\n");
     printf("Masukkan Batas Bawah (a): ");
     scanf("%lf", &batas_a);
     printf("Masukkan Batas Atas  (b): ");
     scanf("%lf", &batas_b);
 
-    // 4. INPUT H DAN HITUNG N
+    /*---[ Input Jarak antar Pias (h) dan Hitung n ]---*/
     while (1)
     {
         printf("Masukkan Jarak antar Pias (h): ");
@@ -217,11 +216,11 @@ int main()
         }
     }
 
-    // Input Eksak
+    /*---[ Input Nilai Eksak ]---*/
     printf("\nMasukkan Nilai Eksak (Analitik): ");
     scanf("%lf", &eksak);
 
-    // 5. PROSES TABEL
+    /*---[ Untuk Menampilkan Tabel Evaluasi ]---*/
     printf("\n--- Tabel Evaluasi ---\n");
     printf("-----------------------------------\n");
     printf("|  i  |   x      |   f(x_i)   |\n");
@@ -256,7 +255,7 @@ int main()
     }
     printf("-----------------------------------\n");
 
-    // 6. HITUNG HASIL AKHIR & GALAT
+    /*---[ HITUNG INTEGRAL DENGAN KAIDAH TRAPESIUM ]---*/
     // Rumus Trapesium: I = (h/2) * [ f(x0) + 2*Sigma(f(xi)) + f(xn) ]
     double integral = (h / 2.0) * (f_awal + f_akhir + (2 * sigma_tengah));
 
