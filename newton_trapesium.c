@@ -256,14 +256,14 @@ int main()
     printf("-----------------------------------\n");
 
     /*---[ HITUNG INTEGRAL DENGAN KAIDAH TRAPESIUM ]---*/
-    // Rumus Trapesium: I = (h/2) * [ f(x0) + 2*Sigma(f(xi)) + f(xn) ]
-    double integral = (h / 2.0) * (f_awal + f_akhir + (2 * sigma_tengah));
+    // Rumus Trapesium: (h/2) * [ f(x0) + f(xn) ] + h * Σf(xi) untuk i = 1 sampai n-1
+    double integral = (h / 2.0) * (f_awal + f_akhir) + h * sigma_tengah;
 
     printf("\n>>> HASIL AKHIR INTEGRASI (Kaidah Trapesium) <<<\n");
-    printf("Nilai Aproksimasi = %.6f\n", integral);
+    printf("Nilai Aproksimasi = %.4f\n", integral);
 
     printf("\n>>> HASIL GALAT <<<\n");
-    printf("Nilai GALAT         = %.6f\n", fabs(integral - eksak));
+    printf("Nilai GALAT         = %.4f\n", fabs(integral - eksak));
 
     return 0;
 }
